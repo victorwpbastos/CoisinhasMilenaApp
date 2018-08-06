@@ -1,0 +1,7 @@
+{
+  "name": "CoisinhasMilena",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

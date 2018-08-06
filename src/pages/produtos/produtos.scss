@@ -1,0 +1,19 @@
+page-produtos {
+	ion-item {
+		padding-left: 0 !important;
+	}
+
+	h2 {
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	ion-thumbnail {
+		margin: 0 16px 0 0 !important;
+		min-width: 142px !important;
+
+		img {
+			width: initial !important;
+		}
+	}
+}

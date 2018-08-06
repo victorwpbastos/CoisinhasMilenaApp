@@ -1,0 +1,49 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>
+			<div style="display: flex; align-items: center; justify-content: center;">
+				<img src="assets/imgs/logo.png" width="40"> Cadastro de Produto
+			</div>
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<form (submit)="atualizarProduto()">
+		<ion-card>
+			<img [src]="DomSanitizer.bypassSecurityTrustUrl(produto.foto)" *ngIf="produto.foto" />
+			<ion-card-content>
+				<ion-item style="padding-left: 0;">
+					<ion-label stacked>Nome</ion-label>
+					<ion-input name="nome" [(ngModel)]="produto.nome" placeholder="Ex: Bolsa Maravilhosa"></ion-input>
+				</ion-item>
+				<ion-item style="padding-left: 0;">
+					<ion-label stacked>Descrição</ion-label>
+					<ion-input name="descricao" [(ngModel)]="produto.descricao" placeholder="Ex: Com forro e 3 repartições, etc"></ion-input>
+				</ion-item>
+				<ion-item style="padding-left: 0;">
+					<ion-label stacked>Preço (R$)</ion-label>
+					<ion-input name="preco" [(ngModel)]="produto.preco" placeholder="Ex: 25,00" type="tel"></ion-input>
+				</ion-item>
+			</ion-card-content>
+			<ion-row style="padding: 0 16px 16px 16px">
+				<ion-col style="padding: 0;" text-center>
+					<button type="button" ion-button icon-start outline color="dark" (click)="selecionarFoto()">
+						<ion-icon name="camera"></ion-icon>
+					</button>
+				</ion-col>
+				<ion-col style="padding: 0;" text-center *ngIf="isUpdating">
+					<button type="button" ion-button icon-start outline color="danger" (click)="apagarProduto()">
+						<ion-icon name="trash"></ion-icon>
+					</button>
+				</ion-col>
+				<ion-col style="padding: 0;" end text-end>
+					<button type="submit" ion-button icon-start>
+						<ion-icon name="checkmark-circle-outline"></ion-icon>
+						{{ isUpdating ? 'Atualizar' : 'Cadastrar' }}
+					</button>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+	</form>
+</ion-content>

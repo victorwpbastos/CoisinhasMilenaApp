@@ -14,7 +14,7 @@
 </ion-header>
 
 <ion-content padding>
-	<form (submit)="atualizarProduto()">
+	<form [formGroup]="form" (submit)="atualizarProduto()">
 		<ion-card>
 			<div style="position: relative;">
 				<img [src]="produto.foto" *ngIf="produto.foto" />
@@ -31,16 +31,20 @@
 			<ion-card-content>
 				<ion-item style="padding-left: 0;">
 					<ion-label stacked>Nome</ion-label>
-					<ion-input name="nome" [(ngModel)]="produto.nome" placeholder="Ex: Bolsa Maravilhosa"></ion-input>
+					<ion-input formControlName="nome" placeholder="Ex: Bolsa Maravilhosa"></ion-input>
 				</ion-item>
-				<ion-item style="padding-left: 0;">
+				<span style="color: salmon;" [style.visibility]="(form.controls.nome.dirty && form.controls.nome.invalid) ? 'visible' : 'hidden'">Preenchimento obrigatório</span>
+
+				<ion-item style="padding-left: 0; margin-bottom: 17px;">
 					<ion-label stacked>Descrição</ion-label>
-					<ion-input name="descricao" [(ngModel)]="produto.descricao" placeholder="Ex: Com forro e 3 repartições, etc"></ion-input>
+					<ion-input formControlName="descricao" placeholder="Ex: Com forro e 3 repartições, etc"></ion-input>
 				</ion-item>
+
 				<ion-item style="padding-left: 0;">
 					<ion-label stacked>Preço (R$)</ion-label>
-					<ion-input name="preco" [(ngModel)]="produto.preco" placeholder="Ex: 25,00" type="tel"></ion-input>
+					<ion-input formControlName="preco" placeholder="Ex: 25,00" type="number"></ion-input>
 				</ion-item>
+				<span style="color: salmon;" [style.visibility]="(form.controls.preco.dirty && form.controls.preco.invalid) ? 'visible' : 'hidden'">Preenchimento obrigatório</span>
 			</ion-card-content>
 			<ion-row style="padding: 16px">
 				<ion-col style="padding: 0;" *ngIf="isUpdating">

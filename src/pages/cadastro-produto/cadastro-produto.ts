@@ -7,6 +7,7 @@ import {
 } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ProdutoService } from '../../providers/produto-service/produto-service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @IonicPage()
 @Component({
@@ -16,6 +17,7 @@ import { ProdutoService } from '../../providers/produto-service/produto-service'
 export class CadastroProdutoPage {
 	public produto: any = { nome: '', descricao: '', preco: '', foto: '' };
 	private isUpdating = false;
+	public form: FormGroup;
 
 	constructor(
 		private viewController: ViewController,
@@ -30,6 +32,17 @@ export class CadastroProdutoPage {
 			this.produto = produto;
 			this.isUpdating = true;
 		}
+
+		this.form = new FormGroup({
+			nome: new FormControl(this.produto.nome, Validators.required),
+			descricao: new FormControl(this.produto.descricao),
+			preco: new FormControl(this.produto.preco, Validators.required),
+			foto: new FormControl(this.produto.foto)
+		});
+
+		this.form.valueChanges.subscribe(data =>
+			Object.assign(this.produto, data)
+		);
 	}
 
 	async selecionarFoto() {
@@ -49,14 +62,25 @@ export class CadastroProdutoPage {
 	}
 
 	atualizarProduto() {
-		if (this.isUpdating) {
-			this.produtoService.updateProduto(this.produto.key, this.produto);
-			this.isUpdating = false;
-		} else {
-			this.produtoService.insertProduto(this.produto);
-		}
+		Object.keys(this.form.controls).forEach(field => {
+			let control = this.form.get(field);
 
-		this.close();
+			control.markAsDirty({ onlySelf: true });
+		});
+
+		if (this.form.valid) {
+			if (this.isUpdating) {
+				this.produtoService.updateProduto(
+					this.produto.key,
+					this.produto
+				);
+				this.isUpdating = false;
+			} else {
+				this.produtoService.insertProduto(this.produto);
+			}
+
+			this.close();
+		}
 	}
 
 	apagarProduto() {

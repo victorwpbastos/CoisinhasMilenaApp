@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController } from 'ionic-angular';
+import { IonicPage, ModalController, LoadingController } from 'ionic-angular';
 import { ProdutoService } from '../../providers/produto-service/produto-service';
 
 @IonicPage()
@@ -9,15 +9,29 @@ import { ProdutoService } from '../../providers/produto-service/produto-service'
 })
 export class ProdutosPage {
 	public produtos: any[] = [];
+	private allProdutos: any[] = [];
 
 	constructor(
 		private modalController: ModalController,
+		private loadingController: LoadingController,
 		private produtoService: ProdutoService
 	) {
+		this.populateProdutos();
+	}
+
+	populateProdutos() {
+		let loading = this.loadingController.create({
+			content: 'Carregando produtos...'
+		});
+
+		loading.present();
+
 		this.produtoService.getAll().subscribe(produtos => {
-			this.produtos = produtos.map(p => {
+			this.produtos = this.allProdutos = produtos.map(p => {
 				return { key: p.key, ...p.payload.val() };
 			});
+
+			loading.dismiss();
 		});
 	}
 
@@ -38,5 +52,27 @@ export class ProdutosPage {
 		this.modalController
 			.create('CadastroProdutoPage', { produto })
 			.present();
+	}
+
+	buscar(value) {
+		if (!value || !this.produtos.length) {
+			return (this.produtos = this.allProdutos);
+		}
+
+		this.produtos = this.allProdutos.filter(
+			p =>
+				p.nome
+					.toString()
+					.toLowerCase()
+					.indexOf(value) !== -1 ||
+				p.descricao
+					.toString()
+					.toLowerCase()
+					.indexOf(value) !== -1 ||
+				p.preco
+					.toString()
+					.toLowerCase()
+					.indexOf(value) !== -1
+		);
 	}
 }

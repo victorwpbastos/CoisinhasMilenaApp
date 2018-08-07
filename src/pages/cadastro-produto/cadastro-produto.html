@@ -1,17 +1,33 @@
 <ion-header>
 	<ion-navbar color="primary">
 		<ion-title>
-			<div style="display: flex; align-items: center; justify-content: center;">
+			<div style="display: flex; align-items: center;">
 				<img src="assets/imgs/logo.png" width="40"> Cadastro de Produto
 			</div>
 		</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only color="light" (click)="close()">
+				<ion-icon name="close"></ion-icon>
+			</button>
+		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
 	<form (submit)="atualizarProduto()">
 		<ion-card>
-			<img [src]="DomSanitizer.bypassSecurityTrustUrl(produto.foto)" *ngIf="produto.foto" />
+			<div style="position: relative;">
+				<img [src]="produto.foto" *ngIf="produto.foto" />
+
+				<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 185px; background: #c4c4c4;"
+				 *ngIf="!produto.foto">
+					<ion-icon name="images" style="font-size: 48px; color: #f7f7f7;"></ion-icon>
+				</div>
+
+				<button type="button" ion-button icon-only color="secondary" style="position: absolute; top: 5px; right: 5px;" (click)="selecionarFoto()">
+					<ion-icon name="camera"></ion-icon>
+				</button>
+			</div>
 			<ion-card-content>
 				<ion-item style="padding-left: 0;">
 					<ion-label stacked>Nome</ion-label>
@@ -26,21 +42,15 @@
 					<ion-input name="preco" [(ngModel)]="produto.preco" placeholder="Ex: 25,00" type="tel"></ion-input>
 				</ion-item>
 			</ion-card-content>
-			<ion-row style="padding: 0 16px 16px 16px">
-				<ion-col style="padding: 0;" text-center>
-					<button type="button" ion-button icon-start outline color="dark" (click)="selecionarFoto()">
-						<ion-icon name="camera"></ion-icon>
+			<ion-row style="padding: 16px">
+				<ion-col style="padding: 0;" *ngIf="isUpdating">
+					<button type="button" ion-button icon-start outline (click)="apagarProduto()">
+						<ion-icon name="trash"></ion-icon> Apagar
 					</button>
 				</ion-col>
-				<ion-col style="padding: 0;" text-center *ngIf="isUpdating">
-					<button type="button" ion-button icon-start outline color="danger" (click)="apagarProduto()">
-						<ion-icon name="trash"></ion-icon>
-					</button>
-				</ion-col>
-				<ion-col style="padding: 0;" end text-end>
+				<ion-col style="padding: 0;" text-end>
 					<button type="submit" ion-button icon-start>
-						<ion-icon name="checkmark-circle-outline"></ion-icon>
-						{{ isUpdating ? 'Atualizar' : 'Cadastrar' }}
+						<ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
 					</button>
 				</ion-col>
 			</ion-row>

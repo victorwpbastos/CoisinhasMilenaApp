@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import {
 	IonicPage,
-	NavController,
 	NavParams,
-	AlertController
+	AlertController,
+	ViewController
 } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { DomSanitizer } from '@angular/platform-browser';
-import {
-	ProdutoService,
-	Produto
-} from '../../providers/produto-service/produto-service';
+import { ProdutoService } from '../../providers/produto-service/produto-service';
 
 @IonicPage()
 @Component({
@@ -18,15 +14,14 @@ import {
 	templateUrl: 'cadastro-produto.html'
 })
 export class CadastroProdutoPage {
-	public produto: Produto;
+	public produto: any = { nome: '', descricao: '', preco: '', foto: '' };
 	private isUpdating = false;
 
 	constructor(
-		private navController: NavController,
+		private viewController: ViewController,
 		private alertController: AlertController,
 		private navParams: NavParams,
 		private camera: Camera,
-		public DomSanitizer: DomSanitizer,
 		private produtoService: ProdutoService
 	) {
 		let produto = this.navParams.get('produto');
@@ -39,13 +34,15 @@ export class CadastroProdutoPage {
 
 	async selecionarFoto() {
 		let options: CameraOptions = {
-			destinationType: this.camera.DestinationType.FILE_URI,
+			destinationType: this.camera.DestinationType.DATA_URL,
 			mediaType: this.camera.MediaType.PICTURE,
 			sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
 		};
 
 		try {
-			this.produto.foto = await this.camera.getPicture(options);
+			let data = await this.camera.getPicture(options);
+
+			this.produto.foto = `data:image/png;base64,${data}`;
 		} catch (error) {
 			console.error('Erro ao tirar a foto', error);
 		}
@@ -59,7 +56,7 @@ export class CadastroProdutoPage {
 			this.produtoService.insertProduto(this.produto);
 		}
 
-		this.navController.pop();
+		this.close();
 	}
 
 	apagarProduto() {
@@ -81,12 +78,17 @@ export class CadastroProdutoPage {
 								this.produtoService.removeProduto(
 									this.produto.key
 								);
-								this.navController.pop();
+
+								this.close();
 							}
 						}
 					]
 				})
 				.present();
 		}
+	}
+
+	close() {
+		this.viewController.dismiss();
 	}
 }

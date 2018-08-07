@@ -2,14 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from '../../../node_modules/rxjs';
 
-export class Produto {
-	key: string;
-	nome: string;
-	descricao: string;
-	preco: number;
-	foto: string;
-}
-
 @Injectable()
 export class ProdutoService {
 	private list: AngularFireList<any>;
@@ -22,11 +14,11 @@ export class ProdutoService {
 		return this.list.snapshotChanges();
 	}
 
-	insertProduto(produto: Produto) {
+	insertProduto(produto: any) {
 		this.list.push(produto);
 	}
 
-	updateProduto(key: string, produto: Produto) {
+	updateProduto(key: string, produto: any) {
 		delete produto.key;
 
 		this.list.update(key, produto);

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
-import { DomSanitizer } from '@angular/platform-browser';
+import { IonicPage, ModalController } from 'ionic-angular';
 import { ProdutoService } from '../../providers/produto-service/produto-service';
 
 @IonicPage()
@@ -12,9 +11,8 @@ export class ProdutosPage {
 	public produtos: any[] = [];
 
 	constructor(
-		private produtoService: ProdutoService,
-		private navController: NavController,
-		public DomSanitizer: DomSanitizer
+		private modalController: ModalController,
+		private produtoService: ProdutoService
 	) {
 		this.produtoService.getAll().subscribe(produtos => {
 			this.produtos = produtos.map(p => {
@@ -33,10 +31,12 @@ export class ProdutosPage {
 	}
 
 	adicionarProduto() {
-		this.navController.push('CadastroProdutoPage');
+		this.modalController.create('CadastroProdutoPage').present();
 	}
 
 	editarProduto(produto) {
-		this.navController.push('CadastroProdutoPage', { produto });
+		this.modalController
+			.create('CadastroProdutoPage', { produto })
+			.present();
 	}
 }

@@ -6,9 +6,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
 import { AngularFireModule } from 'angularfire2';
 import {
-	AngularFireDatabaseModule,
-	AngularFireDatabase
-} from 'angularfire2/database';
+	AngularFirestoreModule,
+	AngularFirestore
+} from 'angularfire2/firestore';
 import { ProdutoService } from '../providers/produto-service/produto-service';
 
 import { MyApp } from './app.component';
@@ -23,7 +23,7 @@ let firebaseConfig = {
 		BrowserModule,
 		IonicModule.forRoot(MyApp),
 		AngularFireModule.initializeApp(firebaseConfig),
-		AngularFireDatabaseModule
+		AngularFirestoreModule.enablePersistence()
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [MyApp],
@@ -31,7 +31,7 @@ let firebaseConfig = {
 		StatusBar,
 		SplashScreen,
 		Camera,
-		AngularFireDatabase,
+		AngularFirestore,
 		ProdutoService,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler }
 	]

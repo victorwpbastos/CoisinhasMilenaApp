@@ -71,7 +71,7 @@ export class CadastroProdutoPage {
 		if (this.form.valid) {
 			if (this.isUpdating) {
 				this.produtoService.updateProduto(
-					this.produto.key,
+					this.produto.id,
 					this.produto
 				);
 				this.isUpdating = false;
@@ -84,7 +84,9 @@ export class CadastroProdutoPage {
 	}
 
 	apagarProduto() {
-		if (this.produto.key) {
+		let id = this.produto.id;
+
+		if (id) {
 			this.alertController
 				.create({
 					title: 'Confirmação',
@@ -99,9 +101,7 @@ export class CadastroProdutoPage {
 						{
 							text: 'Sim',
 							handler: () => {
-								this.produtoService.removeProduto(
-									this.produto.key
-								);
+								this.produtoService.removeProduto(id);
 
 								this.close();
 							}

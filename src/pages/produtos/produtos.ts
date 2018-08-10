@@ -28,7 +28,7 @@ export class ProdutosPage {
 
 		this.produtoService.getAll().subscribe(produtos => {
 			this.produtos = this.allProdutos = produtos.map(p => {
-				return { key: p.key, ...p.payload.val() };
+				return { id: p.payload.doc.id, ...p.payload.doc.data() };
 			});
 
 			loading.dismiss();
@@ -58,6 +58,8 @@ export class ProdutosPage {
 		if (!value || !this.produtos.length) {
 			return (this.produtos = this.allProdutos);
 		}
+
+		value = value.toString().toLowerCase();
 
 		this.produtos = this.allProdutos.filter(
 			p =>

@@ -1,30 +1,33 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { Observable } from '../../../node_modules/rxjs';
+import { Observable } from 'rxjs';
+import {
+	AngularFirestore,
+	AngularFirestoreCollection
+} from 'angularfire2/firestore';
 
 @Injectable()
 export class ProdutoService {
-	private list: AngularFireList<any>;
+	private collection: AngularFirestoreCollection<any>;
 
-	constructor(private adfb: AngularFireDatabase) {
-		this.list = this.adfb.list('produtos');
+	constructor(private afs: AngularFirestore) {
+		this.collection = this.afs.collection<any>('produtos');
 	}
 
 	getAll(): Observable<any> {
-		return this.list.snapshotChanges();
+		return this.collection.snapshotChanges();
 	}
 
 	insertProduto(produto: any) {
-		this.list.push(produto);
+		this.collection.add(produto);
 	}
 
-	updateProduto(key: string, produto: any) {
-		delete produto.key;
+	updateProduto(id: string, produto: any) {
+		delete produto.id;
 
-		this.list.update(key, produto);
+		this.collection.doc(id).update(produto);
 	}
 
-	removeProduto(key: string) {
-		this.list.remove(key);
+	removeProduto(id: string) {
+		this.collection.doc(id).delete();
 	}
 }
